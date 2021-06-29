@@ -1,6 +1,6 @@
 # Lancer le client
 
-Pour démarrer le client, vous pouvez utiliser le serveur proposé par la commande ng:
+Pour démarrer le client, on peut se passer de Docker, on utilise le serveur proposé par la commande ng:
 ```
-ng serve --disableHostCheck
+cd app && ng serve --disableHostCheck
 ```

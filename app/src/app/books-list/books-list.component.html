@@ -1,38 +1,48 @@
-<div class="no-data text-center" *ngIf="books.length == 0">
-    <p>Pas de livres pour le moment !</p>
-</div>
-<div *ngIf="books.length !== 0">
+<div class="books-list">
+  <div class="no-data text-center" *ngIf="books.length == 0">
+      <p>Pas de livres pour le moment !</p>
+  </div>
+  <div *ngIf="books.length !== 0">
     <table class="table table-bordered table-striped">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Titre</th>
-            <th class="text-center" scope="col">Nb. pages</th>
-            <th scope="col">ISBN</th>
-            <th class="text-center" scope="col">En vente</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let book of books">
-            <td>{{book.id}}</td>
-            <td>{{book.title}}</td>
-            <td class="text-center">{{book.pagesCount}}</td>
-            <td>{{book.isbn}}</td>
-            <td class="text-center">
-                <span *ngIf="book.inSell"><i class="fa fa-check text-success" aria-hidden="true"></i></span>
-                <span *ngIf="!book.inSell"><i class="fa fa-times text-danger"></i></span></td>
-          </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="6" class="text-center">
-                    <span><button class="btn"><i class="fa fa-angle-double-left"></i></button></span>
-                    <span><button [disabled]="pageNumber <= 1" (click)="prevPage()" class="btn"><i class="fa fa-angle-left"></i></button></span>
-                    {{books.length}} livres affichés
-                    <span><button [disabled]="pageNumber >= 1" (click)="nextPage()" class="btn"><i class="fa fa-angle-right"></i></button></span>
-                    <span><button class="btn"><i class="fa fa-angle-double-right"></i></button></span>
-                </td>
-            </tr>
-        </tfoot>
-      </table>
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Titre</th>
+          <th class="text-center" scope="col">Nb. pages</th>
+          <th scope="col">ISBN</th>
+          <th class="text-center" scope="col">En vente</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let book of books">
+          <td>{{book.id}}</td>
+          <td>{{book.title}}</td>
+          <td class="text-center">{{book.pagesCount}}</td>
+          <td>{{book.isbn}}</td>
+          <td class="text-center">
+              <span *ngIf="book.inSell"><i class="fa fa-check text-success" aria-hidden="true"></i></span>
+              <span *ngIf="!book.inSell"><i class="fa fa-times text-danger"></i></span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="pagination">
+      <div>
+        <select (change)="changeBooksPerPage($event)">
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+        livres par pages
+      </div>
+      <div>
+        <span><button [disabled]="pageNumber <= 1" (click)="firstPage()" class="btn"><i class="fa fa-angle-double-left"></i></button></span>
+        <span><button [disabled]="pageNumber <= 1" (click)="prevPage()" class="btn"><i class="fa fa-angle-left"></i></button></span>
+        {{pageNumber}} / {{pagesCount}} pages
+        <span><button [disabled]="pageNumber >= pagesCount" (click)="nextPage()" class="btn"><i class="fa fa-angle-right"></i></button></span>
+        <span><button [disabled]="pageNumber >= pagesCount" class="btn" (click)="lastPage()"><i class="fa fa-angle-double-right"></i></button></span>
+      </div>
+    </div>
+  </div>
 </div>

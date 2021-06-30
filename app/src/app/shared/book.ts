@@ -1,9 +1,16 @@
 export class Book {
-    id: number = 0;
-    title: string = '';
-    resume: string = '';
-    pagesCount: number = 0;
-    publishedAt: Date = new Date();
-    isbn: string = '';
-    inSell: boolean = false;
+    id: number|null = null;
+    title: string|null = null;
+    resume: string|null = null;
+    pagesCount: number|null = null;
+    publishedAt: Date|null = null;
+    isbn: string|null = null;
+    inSell: boolean|null = null;
+    author: Author|null = null;
+}
+
+export class Author {
+    id: number =0;
+    name: string = '';
+    birthDate: Date = new Date();
 }

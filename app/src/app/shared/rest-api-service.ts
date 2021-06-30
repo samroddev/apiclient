@@ -17,21 +17,19 @@ export class JsonLDBooksCollection {
 export class RestApiService {
 
   // Url de l'api
-  apiBaseUrl = 'http://localhost:8080/api';
-
-  // On veut dialoguer avec l'api via des données formatées en Json
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  }
+  private apiBaseUrl = 'http://localhost:8080/api';
 
   // Injection du client Http
   constructor(private http: HttpClient) { }
 
   // Méthode permettant de lister les livres à partir de l'api
-  getBooks(pageNumber: number = 1, recordsPerPage: number = 25): Observable<JsonLDBooksCollection> {
-    return this.http.get<JsonLDBooksCollection>(this.apiBaseUrl + '/books?page=' + pageNumber + '&recordsPerPage=' + recordsPerPage)
+  getBooks(pageNumber: number = 1, recordsPerPage: number = 25, orders: any = {}): Observable<JsonLDBooksCollection> {
+    let queryUrl = this.apiBaseUrl + '/books?page=' + pageNumber + '&recordsPerPage=' + recordsPerPage;
+    for (const propertyName in orders) {
+      queryUrl += '&order[' + propertyName + ']=' + orders[propertyName];
+    }
+    console.log(queryUrl);
+    return this.http.get<JsonLDBooksCollection>(queryUrl)
       .pipe(
         retry(1),
         catchError(this.handleError)

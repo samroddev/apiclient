@@ -14,6 +14,7 @@ export class BooksListComponent implements OnInit {
   public pageNumber: number = 1;
   public books: Array<Book> = [];
   public totalBooksCount: number = 0;
+  public orders: any = {title: 'asc'};
 
   constructor(private restApi: RestApiService) {}
 
@@ -25,7 +26,7 @@ export class BooksListComponent implements OnInit {
    * Récupère la liste des livres de la page courante et affiche le résultat
    */
   private loadBooks() {
-    return this.restApi.getBooks(this.pageNumber, this.recordsByPage).subscribe((data: any) => {
+    return this.restApi.getBooks(this.pageNumber, this.recordsByPage, this.orders).subscribe((data: any) => {
       this.books = data['hydra:member'];
       this.totalBooksCount = data['hydra:totalItems'];
       this.pagesCount = Math.floor(this.totalBooksCount / this.recordsByPage);
@@ -70,6 +71,22 @@ export class BooksListComponent implements OnInit {
   public changeBooksPerPage(e: any) {
     this.recordsByPage = e.target.value;
     this.firstPage();
+  }
+
+  /**
+   * Change le tri des livres et force le rafraichissement
+   */
+  public changeOrder(propertyName: any, orderDirection: string = 'asc') {
+    // Ré-ecrit un nouvel objet pour mettre la selection du dernier ordre en premier
+    let orders: any = {};
+    orders[propertyName] = orderDirection;
+    for (let name in this.orders) {
+      if (name !== propertyName) {
+        orders[name] = orderDirection;
+      }
+    }
+    this.orders = orders;
+    this.loadBooks();
   }
 
 }

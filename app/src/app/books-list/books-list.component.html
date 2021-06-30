@@ -29,45 +29,27 @@
       <thead class="thead-dark">
         <tr>
           <th scope="col">
-            <div class="order-bar d-flex flex-column">
-              <button (click)="changeOrder('id', 'desc')" class="btn"><i class="fa fa-sort-up"></i></button>
-              <button (click)="changeOrder('id', 'asc')" class="btn"><i class="fa fa-sort-down"></i></button>
-            </div>
+            <app-ordering fieldName="id" (changedDirection)="onOrderChanged($event)"></app-ordering>
             #
           </th>
           <th scope="col">
-            <div class="order-bar d-flex flex-column">
-              <button (click)="changeOrder('title', 'desc')" class="btn"><i class="fa fa-sort-up"></i></button>
-              <button (click)="changeOrder('title', 'asc')" class="btn"><i class="fa fa-sort-down"></i></button>
-            </div>
+            <app-ordering fieldName="title" (changedDirection)="onOrderChanged($event)"></app-ordering>
             Titre
           </th>
           <th scope="col">
-            <div class="order-bar d-flex flex-column">
-              <button (click)="changeOrder('author.name', 'desc')" class="btn"><i class="fa fa-sort-up"></i></button>
-              <button (click)="changeOrder('author.name', 'asc')" class="btn"><i class="fa fa-sort-down"></i></button>
-            </div>
+            <app-ordering fieldName="author.name" (changedDirection)="onOrderChanged($event)"></app-ordering>
             Auteur
           </th>
           <th class="text-center" scope="col">
-            <div class="order-bar d-flex flex-column">
-              <button (click)="changeOrder('pagesCount', 'desc')" class="btn"><i class="fa fa-sort-up"></i></button>
-              <button (click)="changeOrder('pagesCount', 'asc')" class="btn"><i class="fa fa-sort-down"></i></button>
-            </div>
+            <app-ordering fieldName="pagesCount" (changedDirection)="onOrderChanged($event)"></app-ordering>
             Nb. pages
           </th>
           <th scope="col">
-            <div class="order-bar d-flex flex-column">
-              <button (click)="changeOrder('isbn', 'desc')" class="btn"><i class="fa fa-sort-up"></i></button>
-              <button (click)="changeOrder('isbn', 'asc')" class="btn"><i class="fa fa-sort-down"></i></button>
-            </div>
+            <app-ordering fieldName="isbn" (changedDirection)="onOrderChanged($event)"></app-ordering>
             ISBN
           </th>
           <th class="text-center" scope="col">
-            <div class="order-bar d-flex flex-column">
-              <button (click)="changeOrder('inSell', 'desc')" class="btn"><i class="fa fa-sort-up"></i></button>
-              <button (click)="changeOrder('inSell', 'asc')" class="btn"><i class="fa fa-sort-down"></i></button>
-            </div>
+            <app-ordering fieldName="inSell" (changedDirection)="onOrderChanged($event)"></app-ordering>
             En vente
           </th>
         </tr>

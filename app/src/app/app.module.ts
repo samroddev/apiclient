@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { BooksListComponent } from './books-list/books-list.component';
+import { OrderingComponent } from './ordering/ordering.component';
 
 
 
@@ -16,7 +17,8 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    BooksListComponent
+    BooksListComponent,
+    OrderingComponent
   ],
   imports: [
     BrowserModule,

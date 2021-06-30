@@ -74,15 +74,15 @@ export class BooksListComponent implements OnInit {
   }
 
   /**
-   * Change le tri des livres et force le rafraichissement
+   * Reconstruit l'objet local définissant l'ordre actuel, et rafraichi les données
    */
-  public changeOrder(propertyName: any, orderDirection: string = 'asc') {
+  public onOrderChanged(e: any) {
     // Ré-ecrit un nouvel objet pour mettre la selection du dernier ordre en premier
     let orders: any = {};
-    orders[propertyName] = orderDirection;
+    orders[e.fieldName] = e.direction;
     for (let name in this.orders) {
-      if (name !== propertyName) {
-        orders[name] = orderDirection;
+      if (name !== e.fieldName) {
+        orders[name] = this.orders[name];
       }
     }
     this.orders = orders;

@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { BooksListComponent } from './books-list/books-list.component';
 import { OrderingComponent } from './ordering/ordering.component';
+import { FilteringComponent } from './filtering/filtering.component';
 
 
 
@@ -18,7 +19,8 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     BooksListComponent,
-    OrderingComponent
+    OrderingComponent,
+    FilteringComponent
   ],
   imports: [
     BrowserModule,

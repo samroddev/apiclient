@@ -14,6 +14,7 @@ export class BooksListComponent implements OnInit {
   public pageNumber: number = 1;
   public books: Array<Book> = [];
   public totalBooksCount: number = 0;
+  public filters: any = {};
   public orders: any = {title: 'asc'};
 
   constructor(private restApi: RestApiService) {}
@@ -26,7 +27,7 @@ export class BooksListComponent implements OnInit {
    * Récupère la liste des livres de la page courante et affiche le résultat
    */
   private loadBooks() {
-    return this.restApi.getBooks(this.pageNumber, this.recordsByPage, this.orders).subscribe((data: any) => {
+    return this.restApi.getBooks(this.pageNumber, this.recordsByPage, this.orders, this.filters).subscribe((data: any) => {
       this.books = data['hydra:member'];
       this.totalBooksCount = data['hydra:totalItems'];
       this.pagesCount = Math.floor(this.totalBooksCount / this.recordsByPage);
@@ -86,6 +87,21 @@ export class BooksListComponent implements OnInit {
       }
     }
     this.orders = orders;
+    // Recharge la collection de livres à afficher à partir des filtres et de l'ordre définis
+    this.loadBooks();
+  }
+
+  /**
+   * Reconstruit l'objet local définissant les filtres, et rafraichi les données
+   */
+  public onFilterChanged(e: any) {
+    // Si la valeur de recherche est vide et que le filtre existe on le supprime, sinon on l'affecte
+    if (e.searchValue.length === 0 && e.fieldName in this.filters) {
+      delete this.filters[e.fieldName];
+    } else {
+      this.filters[e.fieldName] = e.searchValue;
+    }
+    // Recharge la collection de livres à afficher à partir des filtres et de l'ordre définis
     this.loadBooks();
   }
 

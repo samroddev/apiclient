@@ -3,10 +3,7 @@
     <h2 class="col-10">Notre collection de livres</h2>
     <div class="col-2"><button class="btn btn-primary">Ajouter un livre</button></div>
   </div>
-  <div class="no-data text-center" *ngIf="books.length == 0">
-      <p>Aucun livre trouvé !</p>
-  </div>
-  <div *ngIf="books.length !== 0">
+  <div>
     <div class="pagination">
       <div>
         <select (change)="changeBooksPerPage($event)">
@@ -28,32 +25,43 @@
     <table class="table table-bordered table-striped">
       <thead class="thead-dark">
         <tr>
-          <th scope="col">
+          <th class="text-center col-1" scope="col">
             <app-ordering fieldName="id" (changedDirection)="onOrderChanged($event)"></app-ordering>
             #
           </th>
-          <th scope="col">
+          <th class="text-center" scope="col">
             <app-ordering fieldName="title" (changedDirection)="onOrderChanged($event)"></app-ordering>
             Titre
           </th>
-          <th scope="col">
+          <th class="text-center col-2" scope="col">
             <app-ordering fieldName="author.name" (changedDirection)="onOrderChanged($event)"></app-ordering>
             Auteur
           </th>
-          <th class="text-center" scope="col">
+          <th class="text-center col-1" scope="col">
             <app-ordering fieldName="pagesCount" (changedDirection)="onOrderChanged($event)"></app-ordering>
             Nb. pages
           </th>
-          <th scope="col">
+          <th class="text-center col-2" scope="col">
             <app-ordering fieldName="isbn" (changedDirection)="onOrderChanged($event)"></app-ordering>
             ISBN
           </th>
-          <th class="text-center" scope="col">
+          <th class="text-center col-1" scope="col">
             <app-ordering fieldName="inSell" (changedDirection)="onOrderChanged($event)"></app-ordering>
             En vente
           </th>
         </tr>
+        <tr>
+          <th><app-filtering fieldName="id" (changedFilter)="onFilterChanged($event)"></app-filtering></th>
+          <th><app-filtering fieldName="title" (changedFilter)="onFilterChanged($event)"></app-filtering></th>
+          <th><app-filtering fieldName="author.name" (changedFilter)="onFilterChanged($event)"></app-filtering></th>
+          <th></th>
+          <th><app-filtering fieldName="isbn" (changedFilter)="onFilterChanged($event)"></app-filtering></th>
+          <th><app-filtering fieldName="inSell" (changedFilter)="onFilterChanged($event)"></app-filtering></th>
+        </tr>
       </thead>
+      <tbody class="no-data text-center" *ngIf="books.length == 0">
+        <tr><td class="text-danger" colspan="6">Aucun livre trouvé !</td></tr>
+      </tbody>
       <tbody>
         <tr *ngFor="let book of books">
           <td>{{book.id}}</td>

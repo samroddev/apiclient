@@ -39,6 +39,16 @@ export class RestApiService {
       )
   }
 
+  // Supprime un livre
+  deleteBook(bookId: number) {
+    let queryUrl = apiBaseUrl + '/books/' + bookId.toString();
+    return this.http.delete(queryUrl)
+    .pipe(
+      retry(1),
+      catchError(this.handleError)
+    )
+  }
+
   // Error handling 
   handleError(error: any) {
     let errorMessage = '';

@@ -1,7 +1,7 @@
 <div class="books-list">
   <div class="title row">
     <h2 class="col-10">Notre collection de livres</h2>
-    <div class="col-2"><button class="btn btn-primary">Ajouter un livre</button></div>
+    <div class="col-2"><button class="btn btn-primary"><i class="fa fa-plus"></i> Ajouter un livre</button></div>
   </div>
   <div>
     <div class="pagination">
@@ -49,6 +49,7 @@
             <app-ordering fieldName="inSell" (changedDirection)="onOrderChanged($event)"></app-ordering>
             En vente
           </th>
+          <th></th>
         </tr>
         <tr>
           <th><app-filtering fieldName="id" (changedFilter)="onFilterChanged($event)"></app-filtering></th>
@@ -57,6 +58,7 @@
           <th></th>
           <th><app-filtering fieldName="isbn" (changedFilter)="onFilterChanged($event)"></app-filtering></th>
           <th><app-filtering fieldName="inSell" (changedFilter)="onFilterChanged($event)"></app-filtering></th>
+          <th></th>
         </tr>
       </thead>
       <tbody class="no-data text-center" *ngIf="books.length == 0">
@@ -74,6 +76,8 @@
               <span *ngIf="book.inSell"><i class="fa fa-check text-success" aria-hidden="true"></i></span>
               <span *ngIf="!book.inSell"><i class="fa fa-times text-danger"></i></span>
           </td>
+          <td>
+            <button class="btn btn-sm btn-danger" (click)="onBookDelete(book.id, book.title)" title="Supprimer ce livre"><i class="fa fa-remove"></i></button>
         </tr>
       </tbody>
     </table>

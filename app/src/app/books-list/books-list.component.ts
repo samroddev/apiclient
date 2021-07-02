@@ -105,4 +105,17 @@ export class BooksListComponent implements OnInit {
     this.loadBooks();
   }
 
+  /**
+   * Supprime un livre
+   */
+  public onBookDelete(bookId: any, bookTitle: string| null) {
+    bookId = bookId !== null ? bookId : 0;
+    if (confirm('Souhaitez-vous vraiment supprimer le livre "' + bookTitle + '" ?')) {
+      return this.restApi.deleteBook(bookId).subscribe((data: any) => {
+        this.loadBooks();
+      });
+    }
+    return true;
+  }
+
 }

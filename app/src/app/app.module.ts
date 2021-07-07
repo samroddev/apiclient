@@ -7,8 +7,8 @@ import { AppComponent } from './app.component';
 import { BooksListComponent } from './books-list/books-list.component';
 import { OrderingComponent } from './ordering/ordering.component';
 import { FilteringComponent } from './filtering/filtering.component';
-
-
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'books'},
@@ -20,13 +20,15 @@ const routes: Routes = [
     AppComponent,
     BooksListComponent,
     OrderingComponent,
-    FilteringComponent
+    FilteringComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     RouterModule.forRoot(routes),
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule, 
+    NgbModule,
   ],
   exports: [
     RouterModule

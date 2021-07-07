@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { RestApiService } from "../shared/rest-api-service";
-import { Book } from '../shared/book';
+import { Book, Tag, Author } from '../shared/book';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Validators, FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-books-list',
@@ -9,6 +11,7 @@ import { Book } from '../shared/book';
 })
 export class BooksListComponent implements OnInit {
 
+  // Définition du contexte d'affichage de la liste (page courante, nombre de livres total, etc...)
   public recordsByPage: number = 10;
   public pagesCount: number = 0;
   public pageNumber: number = 1;
@@ -17,16 +20,91 @@ export class BooksListComponent implements OnInit {
   public filters: any = {};
   public orders: any = {title: 'asc'};
 
-  constructor(private restApi: RestApiService) {}
+  // Déclaration du formulaire d'ajout / édition de livre et des règles de validation
+  bookForm = new FormGroup({
+    id: new FormControl(null),
+    title: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]),
+    author: new FormGroup({
+      name: new FormControl(''),
+      birthDate: new FormControl('')
+    }),
+    resume: new FormControl(''),
+    pagesCount: new FormControl('', [Validators.required, Validators.min(1), Validators.max(999999)]),
+    isbn: new FormControl('',  [Validators.required, Validators.maxLength(13), Validators.pattern(/^[0-9]*$/)]),
+    inSell: new FormControl(false),
+    tags: new FormControl(''),
+  });
 
+  // Mode d'edition (ajout ou suppression)
+  updateMode: string = 'add';
+
+
+  constructor(private restApi: RestApiService, private modalService: NgbModal) {}
+
+  /**
+   * Initialise la liste des livres en chargeant la première page
+   */
   ngOnInit(): void {
     this.firstPage();
   }
 
   /**
+   * Ouvre la modale permettant d'ajouter / éditer un fichier
+   */
+  openBookFormModal(bookFormModal: any, book: Book|null = null) {
+    if (book !== null) {
+      let tagLabels: Array<string> = [];
+      book.tags.forEach((tag) => {
+        tagLabels.push(tag.label);
+      });
+      this.bookForm.patchValue({
+        id: book.id,
+        title: book.title,
+        resume: book.resume,
+        author: book.author,
+        isbn: book.isbn,
+        pagesCount: book.pagesCount,
+        tags: tagLabels.join(', '),
+        inSell: book.inSell,
+      });
+      this.updateMode = 'update';
+    } else {
+      this.updateMode = 'add';
+    }
+    this.modalService.open(bookFormModal, {ariaLabelledBy: 'modal-basic-title', size: 'lg'}).result.then((result: string) => {
+      if (this.bookForm.valid) {
+        let book = new Book();
+        book.id = this.bookForm.get('id')?.value;
+        book.title = this.bookForm.get('title')?.value;
+        book.resume = this.bookForm.get('resume')?.value;
+        book.isbn = this.bookForm.get('isbn')?.value;
+        book.inSell = this.bookForm.get('insell')?.value === undefined ? false : true;
+        book.pagesCount = this.bookForm.get('pagesCount')?.value;
+        book.tags = [];
+        this.bookForm.get('tags')?.value.split(',').forEach(function(tagLabel: string) {
+          let tag = new Tag();
+          tag.label = tagLabel.trim();
+          book.tags.push(tag);
+        });
+        if (book.id === null) {
+          this.restApi.createBook(book).subscribe((data: any) => {
+            this.loadBooks();
+          });
+        } else {
+          this.restApi.updateBook(book).subscribe((data: any) => {
+            this.loadBooks();
+          });
+        }
+      }
+    }, (dismiss: string) => {
+      console.log('Adding / Updating book cancelled');
+    });
+  }
+
+  /**
    * Récupère la liste des livres de la page courante et affiche le résultat
    */
-  private loadBooks() {
+  public loadBooks() {
     return this.restApi.getBooks(this.pageNumber, this.recordsByPage, this.orders, this.filters).subscribe((data: any) => {
       this.books = data['hydra:member'];
       this.totalBooksCount = data['hydra:totalItems'];

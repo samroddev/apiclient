@@ -22,7 +22,9 @@ export class RestApiService {
   // Injection du client Http
   constructor(private http: HttpClient) { }
 
-  // Méthode permettant de lister les livres à partir de l'api
+  /**
+   * Liste les livres en fonction du contexte de pagination, de filtre et d'ordre demandé.
+   */
   getBooks(pageNumber: number = 1, recordsPerPage: number = 25, orders: any = {}, filters: any = {}): Observable<JsonLDBooksCollection> {
     let queryUrl = apiBaseUrl + '/books.jsonld?page=' + pageNumber + '&recordsPerPage=' + recordsPerPage;
     for (const propertyName in orders) {
@@ -36,20 +38,46 @@ export class RestApiService {
       .pipe(
         retry(1),
         catchError(this.handleError)
-      )
+      );
   }
 
-  // Supprime un livre
+  /**
+   * Ajoute un nouveau livre
+   */
+  createBook(book: Book) {
+    return this.http.post(apiBaseUrl + '/books', book)
+      .pipe(
+        retry(1),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Modifie un nouveau livre existant
+   */
+  updateBook(book: Book) {
+    return this.http.put(apiBaseUrl + '/books/' + book.id, book)
+      .pipe(
+        retry(1),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Supprime un livre
+   */
   deleteBook(bookId: number) {
     let queryUrl = apiBaseUrl + '/books/' + bookId.toString();
     return this.http.delete(queryUrl)
-    .pipe(
-      retry(1),
-      catchError(this.handleError)
-    )
+      .pipe(
+        retry(1),
+        catchError(this.handleError)
+      );
   }
 
-  // Error handling 
+  /**
+   * Gestion des erreurs.
+   */
   handleError(error: any) {
     let errorMessage = '';
     if(error.error instanceof ErrorEvent) {

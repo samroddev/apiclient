@@ -1,8 +1,73 @@
-<div class="books-list">
+<div class="books-list" (createdBook)="loadBooks()" (updatedBook)="loadBooks()">
   <div class="title row">
     <h2 class="col-10">Notre collection de livres</h2>
-    <div class="col-2"><button class="btn btn-primary"><i class="fa fa-plus"></i> Ajouter un livre</button></div>
+    <div class="col-2"><button class="btn btn-primary" (click)="openBookFormModal(bookFormModal)"><i class="fa fa-plus"></i> Ajouter un livre</button></div>
   </div>
+
+  <ng-template #bookFormModal let-modal class="modal-lg">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">{{updateMode == 'add' ? 'Ajouter un nouveau livre' : 'Modifier un livre'}}</h4>
+      <button type="button" class="btn btn-danger close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <i class="fa fa-remove"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="bookForm">
+        <div class="m-3">
+            <div class="row m-3">
+                <label class="col-2 form-label">Titre (*)</label>
+                <div class="col-10">
+                    <input type="text" formControlName="title" class="form-control" placeholder="Quel est le titre du livre ?" maxlenght="255" />
+                    <div class="alert alert-danger" role="alert" *ngIf="bookForm.controls['title'].invalid && (bookForm.controls['title'].dirty || bookForm.controls['title'].touched)" class="alert">
+                        Le titre du livre doit avoir une taille comprise entre 3 et 255 caractères.
+                    </div>
+                </div>
+            </div>
+            <div class="row m-3">
+                <label class="col-2 form-label">Résumé</label>
+                <div class="col-10">
+                    <textarea type="text" formControlName="resume" class="form-control" placeholder="Racontez le contexte du livre, l'atmosphère qui s'en dégage..."></textarea>
+                </div>
+            </div>
+            <div class="row m-3">
+                <label class="col-2 form-label">Isbn</label>
+                <div class="col-10">
+                    <input type="text" formControlName="isbn" class="form-control" placeholder="Indiquez le numéro ISBN" maxlenght="16" />
+                    <div class="alert alert-danger" role="alert" *ngIf="bookForm.controls['isbn'].invalid && (bookForm.controls['isbn'].dirty || bookForm.controls['isbn'].touched)" class="alert">
+                        Un numéro ISBN est constitué de 10 à 13 chiffres.
+                    </div>
+                </div>
+            </div>
+            <div class="row m-3">
+                <label class="col-2 form-label">Tags</label>
+                <div class="col-10">
+                    <input type="text" formControlName="tags" class="form-control" placeholder="Proposez des tags (séparés par des ',') associés au livre" />
+                </div>
+            </div>
+            <div class="row m-3">
+                <label class="col-2 form-label">Nb. pages</label>
+                <div class="col-10">
+                    <input type="number" formControlName="pagesCount" class="form-control" min="1" max="999999" placeholder="Indiquez combien de pages composent le livre." />
+                    <div class="alert alert-danger" role="alert" *ngIf="bookForm.controls['pagesCount'].invalid && (bookForm.controls['pagesCount'].dirty || bookForm.controls['pagesCount'].touched)" class="alert">
+                        Un livre peut être composé de 1 à 999999 pages !
+                    </div>
+                </div>
+            </div>
+            <div class="row m-3">
+                <label class="col-2 form-label">En vente</label>
+                <div class="col-10">
+                    <input type="checkbox" formControlName="inSell" value="1" />
+                </div>
+            </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" (click)="modal.dismiss('Cancel')">Annuler</button>
+      <button type="button" class="btn btn-primary" (click)="modal.close('Save click')" [disabled]="!bookForm.valid" [ngClass]="{'btn-primary': bookForm.valid, 'btn-secondary': !bookForm.valid}">Valider</button>
+    </div>
+  </ng-template>
+
   <div>
     <div class="pagination">
       <div>
@@ -41,7 +106,11 @@
             <app-ordering fieldName="pagesCount" (changedDirection)="onOrderChanged($event)"></app-ordering>
             Nb. pages
           </th>
-          <th class="text-center col-2" scope="col">
+          <th class="text-center col-1" scope="col">
+            <app-ordering fieldName="tags" (changedDirection)="onOrderChanged($event)"></app-ordering>
+            Tags
+          </th>
+          <th class="text-center col-1" scope="col">
             <app-ordering fieldName="isbn" (changedDirection)="onOrderChanged($event)"></app-ordering>
             ISBN
           </th>
@@ -56,13 +125,14 @@
           <th><app-filtering fieldName="title" (changedFilter)="onFilterChanged($event)"></app-filtering></th>
           <th><app-filtering fieldName="author.name" (changedFilter)="onFilterChanged($event)"></app-filtering></th>
           <th></th>
+          <th><app-filtering fieldName="tags.label" (changedFilter)="onFilterChanged($event)"></app-filtering></th>
           <th><app-filtering fieldName="isbn" (changedFilter)="onFilterChanged($event)"></app-filtering></th>
           <th><app-filtering fieldName="inSell" (changedFilter)="onFilterChanged($event)"></app-filtering></th>
           <th></th>
         </tr>
       </thead>
       <tbody class="no-data text-center" *ngIf="books.length == 0">
-        <tr><td class="text-danger" colspan="6">Aucun livre trouvé !</td></tr>
+        <tr><td class="text-danger" colspan="8">Aucun livre trouvé !</td></tr>
       </tbody>
       <tbody>
         <tr *ngFor="let book of books">
@@ -71,13 +141,19 @@
           <td *ngIf="book.author !== null">{{book.author.name}}</td>
           <td *ngIf="book.author === null">-</td>
           <td class="text-center">{{book.pagesCount}}</td>
+          <td>
+            <span *ngFor="let tag of book.tags; last as isLast">{{tag.label}}{{isLast ? '':', '}}</span>
+          </td>
           <td>{{book.isbn}}</td>
           <td class="text-center">
               <span *ngIf="book.inSell"><i class="fa fa-check text-success" aria-hidden="true"></i></span>
               <span *ngIf="!book.inSell"><i class="fa fa-times text-danger"></i></span>
           </td>
           <td>
-            <button class="btn btn-sm btn-danger" (click)="onBookDelete(book.id, book.title)" title="Supprimer ce livre"><i class="fa fa-remove"></i></button>
+            <div class="buttonsBar">
+              <button class="btn btn-sm btn-warning" (click)="openBookFormModal(bookFormModal, book)" title="Editer ce livre"><i class="fa fa-edit"></i></button>
+              <button class="btn btn-sm btn-danger" (click)="onBookDelete(book.id, book.title)" title="Supprimer ce livre"><i class="fa fa-remove"></i></button>
+            </div>
         </tr>
       </tbody>
     </table>

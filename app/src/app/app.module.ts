@@ -9,10 +9,12 @@ import { OrderingComponent } from './ordering/ordering.component';
 import { FilteringComponent } from './filtering/filtering.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
-  {path: '', pathMatch: 'full', redirectTo: 'books'},
-  {path: 'books', component: BooksListComponent}
+  {path: '', pathMatch: 'full', redirectTo: 'home'},
+  {path: 'home', component: HomeComponent},
+  {path: 'books', component: BooksListComponent},
 ];
 
 @NgModule({
@@ -21,6 +23,7 @@ const routes: Routes = [
     BooksListComponent,
     OrderingComponent,
     FilteringComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,

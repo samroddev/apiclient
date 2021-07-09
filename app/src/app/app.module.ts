@@ -10,11 +10,13 @@ import { FilteringComponent } from './filtering/filtering.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HomeComponent } from './home/home.component';
+import { AuthentificationFormComponent } from './authentification-form/authentification-form.component';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'home'},
   {path: 'home', component: HomeComponent},
   {path: 'books', component: BooksListComponent},
+  {path: 'login', component: AuthentificationFormComponent},
 ];
 
 @NgModule({
@@ -24,6 +26,7 @@ const routes: Routes = [
     OrderingComponent,
     FilteringComponent,
     HomeComponent,
+    AuthentificationFormComponent,
   ],
   imports: [
     BrowserModule,

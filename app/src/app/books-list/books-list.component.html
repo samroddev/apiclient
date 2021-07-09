@@ -1,9 +1,11 @@
 <div class="books-list" (createdBook)="loadBooks()" (updatedBook)="loadBooks()">
+
   <div class="title row">
     <h2 class="col-10">Notre collection de livres</h2>
-    <div class="col-2"><button class="btn btn-primary" (click)="openBookFormModal(bookFormModal)"><i class="fa fa-plus"></i> Ajouter un livre</button></div>
+    <div class="col-2"><button class="btn btn-primary pull-right" (click)="openBookFormModal(bookFormModal)"><i class="fa fa-plus"></i> Ajouter un livre</button></div>
   </div>
 
+  <!-- Modale d'ajout / modification de fichier -->
   <ng-template #bookFormModal let-modal class="modal-lg">
     <div class="modal-header">
       <h4 class="modal-title" id="modal-basic-title">{{updateMode == 'add' ? 'Ajouter un nouveau livre' : 'Modifier un livre'}}</h4>
@@ -68,6 +70,7 @@
     </div>
   </ng-template>
 
+  <!-- Barre de navigation -->
   <div>
     <div class="pagination">
       <div>
@@ -87,6 +90,8 @@
         <span><button [disabled]="pageNumber >= pagesCount" class="btn" (click)="lastPage()"><i class="fa fa-angle-double-right"></i></button></span>
       </div>
     </div>
+
+    <!-- Liste des livres -->
     <table class="table table-bordered table-striped">
       <thead class="thead-dark">
         <tr>

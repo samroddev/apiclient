@@ -1,37 +1,34 @@
 
 <header>
-    <div class="container">
+    <div class="container-xxl">
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#"><i class="fa fa-connectdevelop"></i> API Platform</a>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav">
                         <li>
-                            <a class="nav-link active" routerLink="home">Home</a>
+                            <a class="nav-link" routerLink="home" routerLinkActive="active">Home</a>
                         </li>
                         <li>
-                            <a class="nav-link" routerLink="books">Livres</a>
+                            <a class="nav-link" routerLink="books" routerLinkActive="active">Livres</a>
                         </li>
                     </ul>
                 </div>
                 <form class="d-flex">
-                    <button *ngIf="currentUser === null" class="btn btn-outline-success" type="submit">Connexion <i class="fa fa-sign-in"></i></button>
+                    <button *ngIf="currentUser === null" class="btn btn-secondary" type="button" [routerLink]="'login'">Connexion <i class="fa fa-sign-in"></i></button>
                     <button *ngIf="currentUser !== null" class="btn btn-outline-danger" type="submit">Déconnexion <i class="fa fa-sign-out"></i></button>
-                    <div class="d-none">
-                        <input type="text" class="form-control" placeholder="Votre e-mail" />
-                        <input type="password" class="form-control" placeholder="Votre mot de passe" />
-                        <button type="submit" class="btn btn-primary">Se connecter</button>
-                    </div>
                 </form>
             </div>
         </nav>
     </div>
 </header>
-<article class="container">
-    <router-outlet></router-outlet>
+<article>
+    <div class="container-xxl">
+        <router-outlet></router-outlet>
+    </div>
 </article>
-<footer>
-    <div class="container">
+<footer class="fixed-bottom">
+    <div class="container-xxl">
         <p>Powered by <strong>API Platform</strong> ! ;-)</p>
         <p class="documentations">Documentations:
             <a href="https://symfony.com/5" target="_blank">Symfony 5</a>

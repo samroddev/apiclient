@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="m-3">
-            <button class="btn btn-primary pull-right">Connexion</button>
+            <button class="btn btn-primary pull-right" (click)="startAuthentification()" [disabled]="!authentificationForm.valid" [ngClass]="{'btn-primary': authentificationForm.valid, 'btn-secondary': !authentificationForm.valid}">Connexion</button>
         </div>
     </div>
     <div class="col-md-4"></div>

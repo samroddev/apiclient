@@ -15,8 +15,8 @@
                     </ul>
                 </div>
                 <form class="d-flex">
-                    <button *ngIf="currentUser === null" class="btn btn-secondary" type="button" [routerLink]="'login'">Connexion <i class="fa fa-sign-in"></i></button>
-                    <button *ngIf="currentUser !== null" class="btn btn-outline-danger" type="submit">Déconnexion <i class="fa fa-sign-out"></i></button>
+                    <div *ngIf="this.currentUserEmail === null"><button class="btn btn-secondary" type="button" [routerLink]="'login'">Connexion <i class="fa fa-sign-in"></i></button></div>
+                    <div *ngIf="this.currentUserEmail !== null"><strong>{{ currentUserEmail }}</strong> <a class="btn btn-outline-danger l-3" (click)="logout()">Déconnexion <i class="fa fa-sign-out"></i></a></div>
                 </form>
             </div>
         </nav>

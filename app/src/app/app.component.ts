@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { Router, NavigationEnd  } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { TokenStorageService } from "./shared/token-storage.service";
 
 @Component({
   selector: 'app-root',
@@ -10,15 +11,30 @@ import { filter } from 'rxjs/operators';
 export class AppComponent {
 
   // Contient l'utilisateur courant (si il est connecté)
-  currentUser = null;
+  currentUserEmail: string|null = null;
 
   // Contient la route courante (permet d'"activer" un lien)
   currentRoute: string = '';
 
-  constructor(private router: Router) {
+  /**
+   * Injection de dépendances
+   * @param router 
+   * @param tokenStorageService 
+   */
+  constructor(private router: Router, private tokenStorageService: TokenStorageService) {
+    // Après avoir changé de route ("changement de page"), on récupère la nouvelle valeur de l'url et de l'utilisateur connecté
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: any) => {
       this.currentRoute = event.url;
-      console.log(this.currentRoute);
+      this.currentUserEmail = this.tokenStorageService.getUserEmail();
     });
   }
+
+  /**
+   * Purge les infos de session ce qui a pour effet de se déconnecter
+   */
+  logout(): void {
+    this.tokenStorageService.clear();
+    this.router.navigateByUrl('/');
+  }
+
 }

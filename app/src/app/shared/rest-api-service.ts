@@ -14,6 +14,11 @@ export class JsonLDBooksCollection {
 // Fixe l'adresse de l'api
 const apiBaseUrl = environment['apiBaseUrl'];
 
+// Options http
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
+
 @Injectable({
   providedIn: 'root'
 })
@@ -76,6 +81,16 @@ export class RestApiService {
   }
 
   /**
+   * Connexion via un login / mot de passe et récupération du token
+   * @param email 
+   * @param password 
+   * @returns 
+   */
+  login(email: string, password: string): Observable<any> {
+    return this.http.post(apiBaseUrl + '/login_check', {username: email, password: password}, httpOptions);
+  }
+
+  /**
    * Gestion des erreurs.
    */
   handleError(error: any) {
@@ -89,6 +104,6 @@ export class RestApiService {
     }
     window.alert(errorMessage);
     return throwError(errorMessage);
- }
+  }
 
 }

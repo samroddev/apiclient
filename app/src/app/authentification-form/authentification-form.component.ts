@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RestApiService } from "../shared/rest-api-service";
 import { TokenStorageService } from "../shared/token-storage.service";
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute  } from '@angular/router';
 
 @Component({
   selector: 'app-authentification-form',
@@ -17,9 +17,18 @@ export class AuthentificationFormComponent implements OnInit {
     password: new FormControl('', [Validators.required]),
   });
 
-  constructor(private restApiService: RestApiService, private tokenStorageService: TokenStorageService, private router: Router) { }
+  //
+  returnUrl: string | null = null;
+
+  constructor(
+    private restApiService: RestApiService,
+    private tokenStorageService: TokenStorageService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
+    this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
   }
 
   /**
@@ -33,7 +42,7 @@ export class AuthentificationFormComponent implements OnInit {
         data => {
           console.log('Connected! [token=' + data.token + ']');
           this.tokenStorageService.setUser(email, data.token);
-          this.router.navigateByUrl('/');
+          this.router.navigateByUrl(this.returnUrl !== null ? this.returnUrl : '/');
         },
         err => {
           console.log('Authentification failed!');

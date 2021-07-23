@@ -13,12 +13,13 @@ import { HomeComponent } from './home/home.component';
 import { AuthentificationFormComponent } from './authentification-form/authentification-form.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
+import { AuthGuard } from './shared/auth.guard';
 
 const routes: Routes = [
-  {path: '', pathMatch: 'full', redirectTo: 'home'},
-  {path: 'home', component: HomeComponent},
-  {path: 'books', component: BooksListComponent},
-  {path: 'login', component: AuthentificationFormComponent},
+  { path: 'home', component: HomeComponent },
+  { path: 'books', component: BooksListComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: AuthentificationFormComponent },
+  { path: '**', redirectTo: 'home' }
 ];
 
 @NgModule({

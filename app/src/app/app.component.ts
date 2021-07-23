@@ -21,7 +21,7 @@ export class AppComponent {
    * @param router 
    * @param tokenStorageService 
    */
-  constructor(private router: Router, private tokenStorageService: TokenStorageService) {
+  constructor(public router: Router, private tokenStorageService: TokenStorageService) {
     // Après avoir changé de route ("changement de page"), on récupère la nouvelle valeur de l'url et de l'utilisateur connecté
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: any) => {
       this.currentRoute = event.url;

@@ -16,7 +16,7 @@
                 </div>
                 <form class="d-flex">
                     <div *ngIf="this.currentUserEmail === null && this.router.url !== '/login'"><button class="btn btn-secondary" type="button" [routerLink]="'login'">Connexion <i class="fa fa-sign-in"></i></button></div>
-                    <div *ngIf="this.currentUserEmail !== null"><strong>{{ currentUserEmail }}</strong> <a class="btn btn-outline-danger l-3" (click)="logout()">Déconnexion <i class="fa fa-sign-out"></i></a></div>
+                    <div *ngIf="this.currentUserEmail !== null"><strong>{{ currentUserEmail }} [{{ getUserMainRole() !== null ? getUserMainRole() : '' }}]</strong> <button type="button" class="btn btn-outline-danger l-3" (click)="logout()">Déconnexion <i class="fa fa-sign-out"></i></button></div>
                 </form>
             </div>
         </nav>

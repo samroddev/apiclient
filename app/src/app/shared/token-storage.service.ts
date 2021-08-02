@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 const TOKEN_KEY = 'auth-token';
+const ROLES_KEY = 'auth-roles';
 const USER_KEY = 'auth-user';
 
 @Injectable({
@@ -34,12 +35,37 @@ export class TokenStorageService {
   }
 
   /**
+   * Retourne les roles de l'utilisateur actuellement connecté.
+   * @returns array|null
+   */
+  public getUserRoles() {
+    let rolesString = sessionStorage.getItem(ROLES_KEY);
+    if (rolesString === null) {
+      return [];
+    } else {
+      let roles = JSON.parse(rolesString);
+      return roles;
+    }
+  }
+
+
+  /**
+   * Retourne vrai si l'utilisateur possède le role fourni en parametre
+   */
+  public hasRole(role: string): boolean 
+  {
+    let roles = this.getUserRoles();
+    return roles.includes(role);
+  }
+
+  /**
    * Enregistre les informations utilisateur
    * @returns void
    */
-  public setUser(email: string, token: string): void {
-    sessionStorage.setItem(USER_KEY, email);
-    sessionStorage.setItem(TOKEN_KEY, token);
+  public setUser(data: any): void {
+    sessionStorage.setItem(USER_KEY, data.user.email);
+    sessionStorage.setItem(ROLES_KEY, JSON.stringify(data.user.roles));
+    sessionStorage.setItem(TOKEN_KEY, data.token);
   }
 
 }

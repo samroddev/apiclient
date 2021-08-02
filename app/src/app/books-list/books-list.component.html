@@ -2,7 +2,7 @@
 
   <div class="title row">
     <h2 class="col-10">Notre collection de livres</h2>
-    <div class="col-2"><button class="btn btn-primary pull-right" (click)="openBookFormModal(bookFormModal)"><i class="fa fa-plus"></i> Ajouter un livre</button></div>
+    <div *ngIf="isAdmin" class="col-2"><button class="btn btn-primary pull-right" (click)="openBookFormModal(bookFormModal)"><i class="fa fa-plus"></i> Ajouter un livre</button></div>
   </div>
 
   <!-- Modale d'ajout / modification de fichier -->
@@ -123,7 +123,8 @@
             <app-ordering fieldName="inSell" (changedDirection)="onOrderChanged($event)"></app-ordering>
             En vente
           </th>
-          <th></th>
+          <th *ngIf="isAdmin"></th>
+          <th *ngIf="isAdmin"></th>
         </tr>
         <tr>
           <th><app-filtering fieldName="id" (changedFilter)="onFilterChanged($event)"></app-filtering></th>
@@ -133,7 +134,7 @@
           <th><app-filtering fieldName="tags.label" (changedFilter)="onFilterChanged($event)"></app-filtering></th>
           <th><app-filtering fieldName="isbn" (changedFilter)="onFilterChanged($event)"></app-filtering></th>
           <th><app-filtering fieldName="inSell" (changedFilter)="onFilterChanged($event)"></app-filtering></th>
-          <th></th>
+          <th *ngIf="isAdmin"></th>
         </tr>
       </thead>
       <tbody class="no-data text-center" *ngIf="books.length == 0">
@@ -154,7 +155,7 @@
               <span *ngIf="book.inSell"><i class="fa fa-check text-success" aria-hidden="true"></i></span>
               <span *ngIf="!book.inSell"><i class="fa fa-times text-danger"></i></span>
           </td>
-          <td>
+          <td *ngIf="isAdmin">
             <div class="buttonsBar">
               <button class="btn btn-sm btn-warning" (click)="openBookFormModal(bookFormModal, book)" title="Editer ce livre"><i class="fa fa-edit"></i></button>
               <button class="btn btn-sm btn-danger" (click)="onBookDelete(book.id, book.title)" title="Supprimer ce livre"><i class="fa fa-remove"></i></button>

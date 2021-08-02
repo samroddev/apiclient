@@ -41,7 +41,7 @@ export class AuthentificationFormComponent implements OnInit {
       .subscribe(
         data => {
           console.log('Connected! [token=' + data.token + ']');
-          this.tokenStorageService.setUser(email, data.token);
+          this.tokenStorageService.setUser(data);
           this.router.navigateByUrl(this.returnUrl !== null ? this.returnUrl : '/');
         },
         err => {

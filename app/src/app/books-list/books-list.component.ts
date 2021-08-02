@@ -3,6 +3,7 @@ import { RestApiService } from "../shared/rest-api-service";
 import { Book, Tag, Author } from '../shared/book';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
+import { TokenStorageService } from "./../shared/token-storage.service";
 
 @Component({
   selector: 'app-books-list',
@@ -35,16 +36,25 @@ export class BooksListComponent implements OnInit {
     tags: new FormControl(''),
   });
 
+  // Déclaration du formulaire d'ajout / édition d'un auteur
+  authorForm = new FormGroup({
+    id: new FormControl(null),
+    name: new FormControl(''),
+    birthDate: new FormControl('')
+  });
+
   // Mode d'edition (ajout ou suppression)
   updateMode: string = 'add';
 
+  isAdmin: boolean = false;
 
-  constructor(private restApi: RestApiService, private modalService: NgbModal) {}
+  constructor(private restApi: RestApiService, private modalService: NgbModal, private tokenStorageService: TokenStorageService) {}
 
   /**
    * Initialise la liste des livres en chargeant la première page
    */
   ngOnInit(): void {
+    this.isAdmin = this.tokenStorageService.hasRole('ROLE_ADMIN');
     this.firstPage();
   }
 

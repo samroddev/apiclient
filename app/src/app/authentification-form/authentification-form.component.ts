@@ -17,8 +17,11 @@ export class AuthentificationFormComponent implements OnInit {
     password: new FormControl('', [Validators.required]),
   });
 
-  //
+  // contient l'url vers laquelle l'utilisateur souhaite être redirigé apres l'authentification
   returnUrl: string | null = null;
+
+  // Contient le message d'erreur si la connexion echoue
+  errorMessage: string | null = null;
 
   constructor(
     private restApiService: RestApiService,
@@ -46,6 +49,7 @@ export class AuthentificationFormComponent implements OnInit {
         },
         err => {
           console.log('Authentification failed!');
+          this.errorMessage = 'L\'authentification a échouée !';
         }
       );
   }

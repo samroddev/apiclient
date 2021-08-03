@@ -16,6 +16,7 @@
         <div class="m-3">
             <button class="btn btn-primary pull-right" (click)="startAuthentification()" [disabled]="!authentificationForm.valid" [ngClass]="{'btn-primary': authentificationForm.valid, 'btn-secondary': !authentificationForm.valid}">Connexion</button>
         </div>
+        <p *ngIf="this.errorMessage" class="alert alert-danger m-2">{{ this.errorMessage }}</p>
     </div>
     <div class="col-md-4"></div>
   </form>

@@ -31,7 +31,7 @@ export class RestApiService {
    * Liste les livres en fonction du contexte de pagination, de filtre et d'ordre demandé.
    */
   getBooks(pageNumber: number = 1, recordsPerPage: number = 25, orders: any = {}, filters: any = {}): Observable<JsonLDBooksCollection> {
-    let queryUrl = apiBaseUrl + '/books.jsonld?page=' + pageNumber + '&recordsPerPage=' + recordsPerPage;
+    let queryUrl = apiBaseUrl + '/media/books.jsonld?page=' + pageNumber + '&recordsPerPage=' + recordsPerPage;
     for (const propertyName in orders) {
       queryUrl += '&order[' + propertyName + ']=' + orders[propertyName];
     }
@@ -50,7 +50,7 @@ export class RestApiService {
    * Ajoute un nouveau livre
    */
   createBook(book: Book) {
-    return this.http.post(apiBaseUrl + '/books', book)
+    return this.http.post(apiBaseUrl + '/media/books', book)
       .pipe(
         retry(1),
         catchError(this.handleError)
@@ -61,7 +61,7 @@ export class RestApiService {
    * Modifie un nouveau livre existant
    */
   updateBook(book: Book) {
-    return this.http.put(apiBaseUrl + '/books/' + book.id, book)
+    return this.http.put(apiBaseUrl + '/media/books/' + book.id, book)
       .pipe(
         retry(1),
         catchError(this.handleError)
@@ -72,7 +72,7 @@ export class RestApiService {
    * Supprime un livre
    */
   deleteBook(bookId: number) {
-    let queryUrl = apiBaseUrl + '/books/' + bookId.toString();
+    let queryUrl = apiBaseUrl + '/media/books/' + bookId.toString();
     return this.http.delete(queryUrl)
       .pipe(
         retry(1),

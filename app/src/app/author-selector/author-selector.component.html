@@ -1,0 +1,14 @@
+<div class="row">
+  <div class="col-11">
+    <input type="text" class="form-control" placeholder="L'auteur du livre" (keyup)="onAuthorChange($event)" [disabled]="disabled || loading" [value]="author !== null ? author.name : ''" />
+  </div>
+  <div *ngIf="this.loading" class="col-1">
+    <i class="fa fa-spinner" aria-hidden="true"></i>
+  </div>
+</div>
+<div *ngIf="this.authors !== null">
+  <ul *ngIf="this.authors.length > 0">
+    <li *ngFor="let author of this.authors" (click)="onAuthorSelected(author)">{{author.name}} [{{author.birthDate| date: 'yyyy'}}]</li>
+  </ul>
+  <p *ngIf="this.authors.length === 0">Pas d'auteur correspondant.</p>
+</div>

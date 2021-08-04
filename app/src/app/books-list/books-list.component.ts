@@ -25,10 +25,7 @@ export class BooksListComponent implements OnInit {
   bookForm = new FormGroup({
     id: new FormControl(null),
     title: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]),
-    author: new FormGroup({
-      name: new FormControl(''),
-      birthDate: new FormControl('')
-    }),
+    author: new FormControl(null),
     resume: new FormControl(''),
     pagesCount: new FormControl('', [Validators.required, Validators.min(1), Validators.max(999999)]),
     isbn: new FormControl('',  [Validators.required, Validators.maxLength(13), Validators.pattern(/^[0-9]*$/)]),
@@ -36,16 +33,11 @@ export class BooksListComponent implements OnInit {
     tags: new FormControl(''),
   });
 
-  // Déclaration du formulaire d'ajout / édition d'un auteur
-  authorForm = new FormGroup({
-    id: new FormControl(null),
-    name: new FormControl(''),
-    birthDate: new FormControl('')
-  });
 
   // Mode d'edition (ajout ou suppression)
   updateMode: string = 'add';
 
+  // Flag permettant de savoir si l'utilisateur courant est administrateur (conditionne l'affichage de certains controles)
   isAdmin: boolean = false;
 
   constructor(private restApi: RestApiService, private modalService: NgbModal, private tokenStorageService: TokenStorageService) {}
@@ -86,6 +78,7 @@ export class BooksListComponent implements OnInit {
         let book = new Book();
         book.id = this.bookForm.get('id')?.value;
         book.title = this.bookForm.get('title')?.value;
+        book.author = this.bookForm.get('author')?.value;
         book.resume = this.bookForm.get('resume')?.value;
         book.isbn = this.bookForm.get('isbn')?.value;
         book.inSell = this.bookForm.get('insell')?.value === undefined ? false : true;

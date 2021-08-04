@@ -14,6 +14,7 @@ import { AuthentificationFormComponent } from './authentification-form/authentif
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
 import { AuthGuard } from './shared/auth.guard';
+import { AuthorSelectorComponent } from './author-selector/author-selector.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -30,6 +31,7 @@ const routes: Routes = [
     FilteringComponent,
     HomeComponent,
     AuthentificationFormComponent,
+    AuthorSelectorComponent,
   ],
   imports: [
     BrowserModule,

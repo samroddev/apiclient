@@ -1,11 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Book } from './book';
+import { Book, Author } from './book';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import { environment } from './../../environments/environment';
 
-// Structure des objects récupérés à partir du webservice
+// Structure des objects récupérés à partir du webservice pour les auteurs
+export class JsonLDAuthorsCollection {
+  'hydra:member': Array<Author>  = [];
+  'hydra:totalItems': number = 0;
+}
+
+// Structure des objects récupérés à partir du webservice pour les livres
 export class JsonLDBooksCollection {
   'hydra:member': Array<Book>  = [];
   'hydra:totalItems': number = 0;
@@ -28,9 +34,28 @@ export class RestApiService {
   constructor(private http: HttpClient) { }
 
   /**
+   * Liste les auteurs.
+   */
+   getAuthors(filters: any = {}): Observable<JsonLDAuthorsCollection>
+   {
+    let queryUrl = apiBaseUrl + '/authors.jsonld?page=1&recordsPerPage=10';
+    for (const propertyName in filters) {
+      queryUrl += '&' + propertyName + '[]=' + filters[propertyName];
+    }
+    console.log(queryUrl);
+    return this.http.get<JsonLDAuthorsCollection>(queryUrl)
+      .pipe(
+        retry(1),
+        catchError(this.handleError)
+      );
+  }
+
+
+  /**
    * Liste les livres en fonction du contexte de pagination, de filtre et d'ordre demandé.
    */
-  getBooks(pageNumber: number = 1, recordsPerPage: number = 25, orders: any = {}, filters: any = {}): Observable<JsonLDBooksCollection> {
+  getBooks(pageNumber: number = 1, recordsPerPage: number = 25, orders: any = {}, filters: any = {}): Observable<JsonLDBooksCollection>
+  {
     let queryUrl = apiBaseUrl + '/media/books.jsonld?page=' + pageNumber + '&recordsPerPage=' + recordsPerPage;
     for (const propertyName in orders) {
       queryUrl += '&order[' + propertyName + ']=' + orders[propertyName];
